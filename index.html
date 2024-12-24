@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natale 2k24</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: white;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .title {
+            padding: 20px;
+            font-size: 2rem;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 100px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-container {
+            position: relative;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 20px;
+            cursor: pointer;
+            font-size: 24px;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.3s;
+            z-index: 10;
+        }
+
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        #prevBtn {
+            left: 20px;
+        }
+
+        #nextBtn {
+            right: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-button {
+                opacity: 0.8;
+                padding: 15px;
+                width: 50px;
+                height: 50px;
+            }
+
+            #prevBtn {
+                left: 10px;
+            }
+
+            #nextBtn {
+                right: 10px;
+            }
+
+            .title {
+                font-size: 1.5rem;
+                padding: 15px;
+            }
+        }
+
+        .fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="title">Natale 2k24</h1>
+    <div class="container">
+        <div class="image-container">
+            <img id="currentImage" src="giulianatale-01.png" alt="Natale 2k24">
+        </div>
+        <button id="prevBtn" class="nav-button">←</button>
+        <button id="nextBtn" class="nav-button">→</button>
+    </div>
+
+    <script>
+        const images = [
+            'giulianatale-01.png',
+            'giulianatale-02.png',
+            'giulianatale-03.png',
+            'giulianatale-04.png',
+            'giulianatale-05.png',
+            'giulianatale-06.png'
+        ];
+        let currentIndex = 0;
+        const imageElement = document.getElementById('currentImage');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const navButtons = document.querySelectorAll('.nav-button');
+        let timeout;
+
+        function updateImage() {
+            imageElement.src = images[currentIndex];
+        }
+
+        function showNavButtons() {
+            navButtons.forEach(btn => btn.classList.remove('fade-out'));
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                if (window.innerWidth <= 768) {
+                    navButtons.forEach(btn => btn.classList.add('fade-out'));
+                }
+            }, 2000);
+        }
+
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            updateImage();
+            showNavButtons();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % images.length;
+            updateImage();
+            showNavButtons();
+        });
+
+        document.addEventListener('touchstart', showNavButtons);
+        document.addEventListener('mousemove', showNavButtons);
+
+        // Initial auto-hide for mobile
+        if (window.innerWidth <= 768) {
+            showNavButtons();
+        }
+    </script>
+</body>
+</html>
